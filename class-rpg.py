@@ -1,10 +1,15 @@
+# Contrib modules 
+# Core
 import os
+from random import randint
+# 3rd party
+# pygame for instance here
 
+# Custom modules
 from Hero import Hero
 from Goblin import Goblin
 from Vampire import Vampire
 
-from random import randint
 
 # from characters import Hero, Goblin
 
@@ -12,6 +17,10 @@ from random import randint
 the_hero = Hero()
 # ditto
 a_goblin = Goblin()
+
+possible_monsters = [Goblin(),Vampire()]
+# possible_monsters[0]()
+
 
 # Make a list to hold all our monsters
 monsters = []
@@ -28,12 +37,16 @@ for i in range(0,number_of_enemies):
 	rand_num = randint(0,1)
 	if(rand_num == 1):
 		monsters.append(Goblin())
+		if choice == 'goblin':
+			monsters.append(Goblin())
 	else:
 		monsters.append(Vampire())
 
 
 # we need to loop through all the monsters!
-for monster in monsters:
+# for i in range(1,len(monsters-1)):
+# 	monsters[i]
+for i,monster in enumerate(monsters):
 	# Run the game as long as BOTH characters have health (are alive)
 	while monster.is_alive() and the_hero.is_alive():
 		# game is on!
@@ -66,13 +79,14 @@ for monster in monsters:
 			print "Invalid input %s" % user_input
 
 		# goblins turn to attack!! (only if he's still alive)
-		if monster.get_health() > 0:
+		# if monster.get_health() > 0:
+		if monster.is_alive():
 			# just like the goblin, the hero should be changing its own stuff
 			# so... call take_damage on the hero
 			# hero_health -= goblin_power
 			the_hero.take_damage(monster.power)
 
-			print "The goblin hits you for %d damage" % monster.power
+			print "The %s hits you for %d damage" % (monster.name, monster.power)
 			# goblin has attacked, now check to see if hero is still alive...
-			if the_hero.health <= 0:
-				print "You have been killed by the weak goblin. Shame on you."
+			if not the_hero.is_alive():
+				print "You have been killed by the weak %s. Shame on you." % monster.name
